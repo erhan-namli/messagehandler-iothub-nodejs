@@ -18,6 +18,23 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
 
+let server = http.createServer(app);
+
+let wss = new WebSocket.Server({ server });
+
+wss.broadcast = (data) => {
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      try {
+        console.log(`Broadcasting data ${data}`);
+        client.send(data);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  });
+};
+
 app.post('/action_page', (req, res) => {
 
     sCONNECTION_STRING = req.body.connection_string
@@ -55,11 +72,11 @@ app.get("/home", (req, res) => {
         });
       })().catch();
 
-    res.send("Selam")
+    res.sendFile(path.join(__dirname, 'public/home.html'));
     
 })
 
-let server = http.createServer(app);
+
 
 server.listen(process.env.PORT || '3030', () => {
     console.log('Listening on %d.', server.address().port);
