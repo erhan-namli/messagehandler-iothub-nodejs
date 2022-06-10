@@ -22,6 +22,8 @@ let server = http.createServer(app);
 
 let wss = new WebSocket.Server({ server });
 
+
+
 wss.broadcast = (data) => {
   wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
@@ -75,6 +77,35 @@ app.get("/home", (req, res) => {
     res.sendFile(path.join(__dirname, 'public/home.html'));
     
 })
+
+wss.on('connection', ws => {
+  ws.on('message', message => {
+
+    console.log("Client Message : " + message)
+
+    if ( JSON.parse(message).method == 'sendMessage') {
+
+      var Client = require('azure-iothub').Client;
+      var Message = require('azure-iot-common').Message;
+
+      var ServiceClient = Client.fromConnectionString(sSERVICE_KEY)
+
+      ServiceClient.open(function (err) {
+        if (err) {
+          console.error('Could not connect: ' + err.message);
+        } else {
+          console.log('Service client connected');
+        
+          var message = new Message("Data" + "," + message.messageContent)
+          console.log('Sending message: ' + message.getData());
+          ServiceClient.send(targetDevice, message);
+        }
+      });
+
+    }
+    
+
+  })})
 
 
 
