@@ -1,5 +1,7 @@
 # messagehandler-iothub-nodejs
 
+![Screenshot](homepage.PNG)
+
 ## How to Install
 
 - Firstly download the program zip file
