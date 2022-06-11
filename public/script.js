@@ -8,6 +8,8 @@ $(document).ready(() => {
 
         messageData = JSON.parse(message.data);
 
+        console.log(messageData)
+
         RaspberryPiData = messageData.IotData
 
         document.getElementById("iotdata").innerHTML = RaspberryPiData
@@ -16,7 +18,6 @@ $(document).ready(() => {
 })
 
 window.onload = function () {
-
 
     sendMessageButton = document.querySelector('#sendMessageButton')
 

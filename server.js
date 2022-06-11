@@ -23,7 +23,6 @@ let server = http.createServer(app);
 let wss = new WebSocket.Server({ server });
 
 
-
 wss.broadcast = (data) => {
   wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
@@ -56,13 +55,12 @@ app.get("/home", (req, res) => {
     const eventHubReader = new EventHubReader(sSERVICE_KEY, sCONSUMER_GROUP);
 
     (async () => {
-        await eventHubReader.startReadMessage((message, date, deviceId) => {
+        await eventHubReader.startReadMessage((message, date) => {
           try {
             const payload = {
-              Type : message[0].type,
-              IotData: message,
+              Type : message.type,
+              IotData: message.data,
               MessageDate: date || Date.now().toISOString(),
-              DeviceId: deviceId,
             };
 
             console.log(payload)
@@ -85,6 +83,8 @@ wss.on('connection', ws => {
 
     if ( JSON.parse(message).method == 'sendMessage') {
 
+      var messageContent = JSON.parse(message).messageContent 
+
       var Client = require('azure-iothub').Client;
       var Message = require('azure-iot-common').Message;
 
@@ -96,9 +96,13 @@ wss.on('connection', ws => {
         } else {
           console.log('Service client connected');
         
-          var message = new Message("Data" + "," + message.messageContent)
-          console.log('Sending message: ' + message.getData());
-          ServiceClient.send(targetDevice, message);
+          var message = new Message("Data" + "," + messageContent)
+          //console.log('Sending message: ' + message.getData());
+
+          console.log(sDEVICE_ID);
+
+          ServiceClient.send(sDEVICE_ID, message);
+          console.log("Buraya geldi")
         }
       });
 
