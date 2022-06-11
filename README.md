@@ -3,7 +3,7 @@
 ## How to Install
 
 - Firstly download the program zip file
-- Then after install dependecies using this command in bash
+- After that install dependecies using this command in bash
 
 ```bash
 npm install
