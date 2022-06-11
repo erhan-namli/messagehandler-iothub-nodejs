@@ -14,3 +14,4 @@ npm run devStart
  ## How to use
  
 ** STILL WORKING ON **
+You can proceed to the application by following the medium article until the Readme section is finished -> https://medium.com/@erhan_namli/control-your-raspberry-pi-remotely-over-the-internet-using-microsoft-azure-services-part-2-fa64a40bfd85
